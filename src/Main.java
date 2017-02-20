@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        String path = classloader.getResource("example.in").getPath();
+        String path = classloader.getResource("small.in").getPath();
 
         Pizza pizza = Utils.parsePizza(path);
 
@@ -79,7 +79,7 @@ public class Main {
                 }
             }
         }
-        return null;
+        return potentialSlices;
     }
 
     private static void printPizza(Pizza pizza) {
