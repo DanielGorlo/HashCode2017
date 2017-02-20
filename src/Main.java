@@ -6,17 +6,44 @@ public class Main {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         String path = classloader.getResource("example.in").getPath();
 
-
         Pizza pizza = Utils.parsePizza(path);
 
         printPizza(pizza);
 
-        Slice currentSlice;
-        ArrayList<Slice> potentialSlices = new ArrayList<>();
-
-        NumberOfExtras numberOfExtras;
-
         //First, we brute force the shit out of the pizza
+        ArrayList<Slice> allPossibleSlices = getPotentialSlices(pizza);
+
+        printSlices(allPossibleSlices);
+
+    }
+        //Next, we check for overlaps
+//        for (int i = 0; i < allPossibleSlices.size(); i++) {
+//            Slice currentSlice = allPossibleSlices.get(i);
+//            ArrayList<Slice> potentialSliceGroups = new ArrayList<>();
+//            potentialSliceGroups.add(currentSlice);
+//
+//            ArrayList<Slice> matchingSlices = getMatchingSlices(currentSlice, allPossibleSlices);
+//            while (matchingSlices.size() >= 0) {
+//
+//            }
+//        }
+//    }
+//
+//    private static ArrayList<Slice> getMatchingSlices(Slice s1, ArrayList<Slice> allPossibleSlices) {
+//        ArrayList<Slice> nonOverlappingSlices = new ArrayList<>();
+//        for (Slice s2 : allPossibleSlices) {
+//            if (!s2.isOverlapping(s1)) {
+//                nonOverlappingSlices.add(s2);
+//            }
+//
+//        }
+//        return nonOverlappingSlices;
+//    }
+
+    private static ArrayList<Slice> getPotentialSlices(Pizza pizza) {
+        ArrayList<Slice> potentialSlices = new ArrayList<>();
+        Slice currentSlice;
+        NumberOfExtras numberOfExtras;
         rows:
         for (int r = 0; r < pizza.getWidth(); r++) {
 
@@ -52,11 +79,7 @@ public class Main {
                 }
             }
         }
-
-        printSlices(potentialSlices);
-
-        //Next, we check for overlaps
-
+        return null;
     }
 
     private static void printPizza(Pizza pizza) {

@@ -55,6 +55,22 @@ public class Slice {
         this.x = x;
     }
 
+    public boolean isOverlapping(Slice s) {
+        if (getX() + getW() < s.getX() && s.getY() + s.getH() > getY()) {
+            return true;
+        }
+        if (getY() + getH() < s.getY() && s.getX() + s.getW() > getX()) {
+            return true;
+        }
+        if (s.getX() + s.getW() < getX() && getY() + getH() > s.getY()) {
+            return true;
+        }
+        if (s.getY() + s.getH() < getY() && getX() + getW() > s. getX()) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "|x: " + getX() + "| y: " + getY() + "| w:" + getW() + "| h:" + getH() + "|";
