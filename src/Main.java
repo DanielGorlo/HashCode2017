@@ -1,83 +1,73 @@
+import java.util.ArrayList;
+
 public class Main {
 
     public static void main(String[] args) {
-        Extras[][] pizza = new Extras[0][0];
-        int l = 2;
-        int h = 4;
-
-        Extras[][] currentSlice = new Extras[0][0];
-        Extras[][][] potentialSlices = new Extras[0][0][0];
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        String path = classloader.getResource("example.in").getPath();
 
 
-        //rows
-        for (int i = 0; i < pizza.length; i++) {
-            //columns
-            for (int j = pizza[i].length; j > 0; j--) {
-                currentSlice = new Extras[i][j];
+        Pizza pizza = Utils.parsePizza(path);
 
-                NumberOfExtras numberOfExtras = getNumberOfExras(pizza);
-                int numberOfTomatoes = numberOfExtras.numberOfTomatoes;
-                int numberOfMushrooms = numberOfExtras.numberOfMushrooms;
+        printPizza(pizza);
 
-                if (numberOfTomatoes < l || numberOfMushrooms < l || numberOfTomatoes > h || numberOfMushrooms > h) {
-                    //stop
-                    continue;
-                }
-            }
-            //need to hop l times
-        }
-    }
+        Slice currentSlice;
+        ArrayList<Slice> potentialSlices = new ArrayList<>();
 
-    private static int getNumberOfTomatoes(Extras[][] slice) {
-        int v = 0;
+        NumberOfExtras numberOfExtras;
 
-        //rows
-        for (int i = 0; i < slice.length; i++) {
-            //columns
-            for (int j = 0; j < slice[i].length; j++) {
-                if (slice[i][j] == Extras.Tomato) {
-                    v++;
-                }
-            }
-        }
-        return v;
-    }
+        //First, we brute force the shit out of the pizza
+        rows:
+        for (int r = 0; r < pizza.getWidth(); r++) {
 
-    private static NumberOfExtras getNumberOfExras(Extras[][] slice) {
-        int t = 0;
-        int m = 0;
+            columns:
+            for (int c = 0; c < pizza.getHeight(); c++) {
 
-        //rows
-        for (int i = 0; i < slice.length; i++) {
-            //columns
-            for (int j = 0; j < slice[i].length; j++) {
-                if (slice[i][j] == Extras.Mushroom) {
-                    m++;
-                }
-                else {
-                    t++;
+                row_width:
+                for (int rw = 1; rw < pizza.getWidth() - r; rw++) {
+                    currentSlice = new Slice(r, c, rw, 1);
+
+                    numberOfExtras = Utils.getNumberOfExras(currentSlice, pizza);
+
+                    if (numberOfExtras.numberOfTomatoes > pizza.getH() || numberOfExtras.numberOfMushrooms > pizza.getH()) {
+                        break row_width;
+                    }
+
+                    column_height:
+                    for (int ch = 1; ch < pizza.getHeight() - c; ch++) {
+                        currentSlice = new Slice(r, c, rw, ch);
+
+                        numberOfExtras = Utils.getNumberOfExras(currentSlice, pizza);
+
+                        if (numberOfExtras.numberOfTomatoes > pizza.getH() || numberOfExtras.numberOfMushrooms > pizza.getH()) {
+                            break column_height;
+                        }
+
+                        if (numberOfExtras.numberOfTomatoes < pizza.getL() || numberOfExtras.numberOfMushrooms < pizza.getL()) {
+                            continue;
+                        }
+
+                        potentialSlices.add(currentSlice);
+                    }
                 }
             }
         }
-        return new NumberOfExtras(m,t);
+
+        printSlices(potentialSlices);
+
+        //Next, we check for overlaps
+
     }
 
-    private enum Extras {
-        Mushroom("M"),
-        Tomato("T");
-
-        Extras(String m) {
-
-        }
+    private static void printPizza(Pizza pizza) {
+        System.out.println("Pizza:");
+        System.out.println(pizza);
     }
 
-    private static class NumberOfExtras {
-        int numberOfTomatoes;
-        int numberOfMushrooms;
-
-        NumberOfExtras(int m, int t) {
-            numberOfMushrooms = m;
-            numberOfTomatoes = t;
+    private static void printSlices(ArrayList<Slice> potentialSlices) {
+        System.out.println("Potential slices:");
+        for (Slice s : potentialSlices) {
+            System.out.println(s);
         }
     }
 }
