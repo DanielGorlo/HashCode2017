@@ -24,7 +24,7 @@ public class Main {
             for (int c = 0; c < pizza.getHeight(); c++) {
 
                 row_width:
-                for (int rw = 1; rw < pizza.getWidth() - r; rw++) {
+                for (int rw = 2 * pizza.getL(); rw <= pizza.getWidth() - r; rw++) {
                     currentSlice = new Slice(r, c, rw, 1);
 
                     numberOfExtras = Utils.getNumberOfExras(currentSlice, pizza);
@@ -34,7 +34,7 @@ public class Main {
                     }
 
                     column_height:
-                    for (int ch = 1; ch < pizza.getHeight() - c; ch++) {
+                    for (int ch = 1; ch <= pizza.getHeight() - c; ch++) {
                         currentSlice = new Slice(r, c, rw, ch);
 
                         numberOfExtras = Utils.getNumberOfExras(currentSlice, pizza);
@@ -44,7 +44,7 @@ public class Main {
                         }
 
                         if (numberOfExtras.numberOfTomatoes < pizza.getL() || numberOfExtras.numberOfMushrooms < pizza.getL()) {
-                            continue;
+                            continue column_height;
                         }
 
                         potentialSlices.add(currentSlice);

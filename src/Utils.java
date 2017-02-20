@@ -13,9 +13,9 @@ public class Utils {
         Extras[][] pizzaMatrix = pizza.getPizzaMatrix();
 
         //rows
-        for (int i = slice.getX(); i < slice.getW(); i++) {
+        for (int i = slice.getX(); i < slice.getX() + slice.getW(); i++) {
             //columns
-            for (int j = slice.getY(); j < slice.getH(); j++) {
+            for (int j = slice.getY(); j < slice.getY() + slice.getH(); j++) {
                 if (pizzaMatrix[i][j] == Extras.Mushroom) {
                     m++;
                 } else {
